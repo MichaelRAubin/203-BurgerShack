@@ -31,6 +31,7 @@ namespace BurgerShack
             services.AddTransient<BurgersService>();
             services.AddTransient<SidesService>();
             services.AddTransient<DrinksService>();
+            services.AddTransient<OrdersService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

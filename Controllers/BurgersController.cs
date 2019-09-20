@@ -20,13 +20,21 @@ namespace BurgerShack.Controllers
         {
             return _bs.GetBurgers();
         }
-
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Burger> Get(string id)
         {
-            return "value";
+            try
+            {
+                Burger burger = _bs.GetBurgerById(id);
+                return Ok(burger);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
+
 
         // POST api/values
         [HttpPost]

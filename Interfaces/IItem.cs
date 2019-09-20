@@ -5,10 +5,7 @@ namespace BurgerShack.Interfaces
         string Id { get; set; }
         string Name { get; set; }
         string Description { get; set; }
-
-        //decimal _BasePrice { get; }
-
-
+        decimal Price { get; set; }
     }
 
 
