@@ -14,12 +14,6 @@ namespace BurgerShack.Controllers
     {
         private readonly BurgersService _bs;
 
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<Burger>> Get()
-        {
-            return _bs.GetBurgers();
-        }
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<Burger> Get(string id)
@@ -35,7 +29,6 @@ namespace BurgerShack.Controllers
             }
         }
 
-
         // POST api/values
         [HttpPost]
         public ActionResult<Burger> Post([FromBody] Burger burgerData)
@@ -43,13 +36,15 @@ namespace BurgerShack.Controllers
             try
             {
                 Burger myBurger = _bs.AddBurger(burgerData);
-                return Ok(myBurger);
+                return Created("api/burgers/" + myBurger.Id, myBurger);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message); //code snippet
             }
         }
+
+
 
         // PUT api/values/5
         [HttpPut("{id}")]

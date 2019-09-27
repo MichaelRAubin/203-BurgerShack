@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using MySql.Data.MySqlClient;
 
 namespace BurgerShack
@@ -29,10 +30,13 @@ namespace BurgerShack
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BurgerShack", Version = "v1" });
+            });
             services.AddSingleton<FakeDb>();
 
             services.AddScoped<IDbConnection>(o => CreateDbConnection());
-
             services.AddTransient<BurgersRepository>();
             services.AddTransient<BurgersService>();
             services.AddTransient<SidesService>();
@@ -43,8 +47,8 @@ namespace BurgerShack
 
         private IDbConnection CreateDbConnection()
         {
-            var connectionString = Configuration.GetSection("db")
-            .GetValue<string>("gearhost");
+            var connectionString = Configuration.GetSection("db").GetValue<string>("gearhost");
+
             return new MySqlConnection(connectionString);
         }
 
@@ -60,6 +64,12 @@ namespace BurgerShack
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BurgerShack");
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
